@@ -1,0 +1,4 @@
+
+
+class Player2Ship {
+}
