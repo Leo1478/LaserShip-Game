@@ -8,120 +8,59 @@ import java.awt.event.KeyListener;
 class GameLoop {
 
 
-    
-
     //objects
     Output output;
-    JFrame j;
-    JPanel panel;
-    KeyListener listener;
+    JFrame jFrame;
 
-    LaserShip l;
-    GameLoop g;
     Menu menu = new Menu();
     SinglePlayer single = new SinglePlayer();
-    MultiPlayer multi = new MultiPlayer();
 
     fpsTracker fps = new fpsTracker();
 
-
     //constructor
     GameLoop(){
-
         init();
     }
 
     //main game loop for everything
     void gameLoop() {
 
-        //init();
-
         fps.time();
-
-
         while (GameVariables.inGame) {
 
             GameVariables.frame++;
 
             if (GameVariables.menu) {
-
                 menu.menuLoop();
-
-
+                System.out.println("menu");
             }
-
 
             if (GameVariables.single) {
-                single.SingleLoop();
-
+                single.singleLoop();
             }
 
-
-            if (GameVariables.multi) {
-
-                multi.MultiLoop();
-
-            }
-
-
-            j.repaint();
+            jFrame.repaint();
             delay(7);
-
-
         }
-
     }
 
     void init() {
-
         settings();
-
     }
 
     void settings() {
 
-
-
-
-        j = new JFrame();
+        jFrame = new JFrame();
         output = new Output();
-        panel = new JPanel();
-        Output o = new Output();
 
-        j.getContentPane().add(BorderLayout.CENTER, output);
+        output = new Output();
 
-        j.setTitle("LaserShipGame");
-        j.setSize(1500, 1000);
-        j.setVisible(true);
-        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setTitle("LaserShipGame");
+        jFrame.setSize(1500, 1000);
+        jFrame.setVisible(true);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        j.add(o);
-
-        panel.setBackground(Color.PINK);
-
-
-        JButton jb = new JButton("test");
-
-        panel.add(jb);
-        panel.add(output);
-
-        //j.add(panel);
-
-
-
-        //j.add(panel);
-
-
-        //menu.buttons(j);
-
-
-
-
-        //panel.add(o);
-
-
-
-        //menu.buttons(panel);
+        jFrame.add(output);
 
 
 
@@ -160,20 +99,13 @@ class GameLoop {
 
                 single.draw(g);
             }
-            if (GameVariables.multi) {
-
-                multi.draw(g);
-            }
-
-
         }
-
-
     }
 
-
+    /**
+     * class for key inputs
+     */
     private class KeyInput implements KeyListener {
-
 
         //loop for inputs
 
@@ -200,9 +132,5 @@ class GameLoop {
             single.move(e, false);
 
         }
-
-
     }
-
-
 }

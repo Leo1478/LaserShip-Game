@@ -2,24 +2,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
-public class Enemy extends JPanel {
-
+class Enemy extends Entity {
 
     //objects
     Random rand = new Random();
 
-    //position of enemies
 
+    //position of enemies
     int eneX;
     int eneY;
 
-    int x[] = new int[100];
-    int y[] = new int[100];
+    int[] x = new int[100];
+    int[] y = new int[100];
 
     //amount of enemies
     int amount = 0;
     int total = 0;
     int max = 100;
+
+    int speed = 1;
+
+
 
     //spawn rate for enemies
     boolean spawnRate(int rate) {
@@ -32,7 +35,7 @@ public class Enemy extends JPanel {
     // add enemy coordinates to array
     void setEnemy() {
 
-        eneX = rand.nextInt(1500) + 300;
+        eneX = rand.nextInt(500) + 1000;
         eneY = rand.nextInt(800) + 100;
 
         x[amount] = eneX;
@@ -59,13 +62,16 @@ public class Enemy extends JPanel {
         }
     }
 
-    void moveEnemies() {
+
+    void moveEnemy() {
 
         for (int numEnemy = 0; numEnemy < total; numEnemy++) {
 
-            x[numEnemy]--;
+            x[numEnemy]-= speed;
         }
     }
+
+
 
     void draw(Graphics g){
 
@@ -75,7 +81,6 @@ public class Enemy extends JPanel {
         }
 
     }
-
 
 
 }

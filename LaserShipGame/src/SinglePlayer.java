@@ -10,18 +10,32 @@ import java.io.IOException;
 class SinglePlayer extends JPanel implements KeyListener {
 
 
-    GameLoop g;
-    Menu m;
-
     private BufferedImage backGround;
 
     Ship ship = new Ship(100, 100);
     Enemy enemy = new Enemy();
+    EnemyRectangle enemyRectangle = new EnemyRectangle();
+    EnemyTriangle enemyTriangle = new EnemyTriangle();
+
+    float backgroundPosition = 0;
 
     boolean init = false;
 
+    // constructor
+    void SinglePlayer(){
 
-    void SingleLoop() {
+    }
+
+
+    void singleLoop() {
+
+        backgroundPosition -= 0.5;
+
+        if(backgroundPosition == -1500){
+            backgroundPosition = 0;
+        }
+
+
 
         ship.resetSpeed();
 
@@ -37,17 +51,39 @@ class SinglePlayer extends JPanel implements KeyListener {
 
         ship.moveLaser();
 
+
+        //if (ship.shipAlive & enemy.spawnRate(50)) {
+        //    enemy.setEnemy();
+        //}
+
         if (ship.shipAlive & enemy.spawnRate(50)) {
-            enemy.setEnemy();
+            enemyRectangle.setEnemy();
+        }
+        if (ship.shipAlive & enemy.spawnRate(50)) {
+            enemyTriangle.setEnemy();
         }
 
-        enemy.removeEnemy(ship.laserHitEnemy(enemy));
+        //enemy.removeEnemy(ship.laserHitEnemy(enemy));
 
-        enemy.moveEnemies();
+        enemyRectangle.removeEnemy(ship.laserHitEnemy(enemyRectangle));
+        enemyTriangle.removeEnemy(ship.laserHitEnemy(enemyTriangle));
 
-        if (ship.shipHitEnemy(enemy)) {
+        //enemy.moveEnemies();
+        enemyRectangle.moveEnemy();
+        enemyTriangle.moveEnemy();
+
+        //if (ship.shipHitEnemy(enemy)) {
+            //ship.removeShip();
+        //}
+
+        if (ship.shipHitEnemy(enemyRectangle)) {
             ship.removeShip();
         }
+
+        if (ship.shipHitEnemy(enemyTriangle)) {
+            ship.removeShip();
+        }
+
 
 
 
@@ -73,7 +109,9 @@ class SinglePlayer extends JPanel implements KeyListener {
         ship.drawShip(g);
         ship.drawLaser(g);
         ship.drawBox(g);
-        enemy.draw(g);
+        //enemy.draw(g);
+        enemyRectangle.draw(g);
+        enemyTriangle.draw(g);
 
     }
 
@@ -87,12 +125,11 @@ class SinglePlayer extends JPanel implements KeyListener {
 
     void background(Graphics g){
 
-        g.drawImage(backGround, 0, 0, null);
+        g.drawImage(backGround,(int) backgroundPosition, 0, null );
+        g.drawImage(backGround, (int) backgroundPosition + 1500, 0, null);
+
 
     }
-
-
-
 
 
     //use parameter true for keyPressed, false for keyReleased

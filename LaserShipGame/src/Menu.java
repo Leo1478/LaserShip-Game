@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -6,23 +7,19 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 class Menu extends JPanel implements KeyListener {
 
 
-    LaserShip l;
-    GameLoop g;
-
-    JButton singleButton;
-    JButton multiButton;
-    JLabel text;
-    JPanel panel;
-
     //keys for menu
 
+    private BufferedImage SingleButton;
 
-
+    String imagePath = "images\\";
 
 
     void menuLoop() {
@@ -31,23 +28,29 @@ class Menu extends JPanel implements KeyListener {
 
     }
 
-
-
-    void buttons(JPanel panel){
-
-        text = new JLabel("trsjghxdfbvncvhmnhmghjdghfthdfh");
-        text.setPreferredSize(new Dimension(100, 900));
-        panel.add(text);
-
-        singleButton = new JButton("single player" + "dfghtf hdgf jyj jfhdf h");
-        panel.add(singleButton);
+    void loadImage(){
+        try {
+            SingleButton = ImageIO.read(new File("F:\\downloads\\LaserShip-Game-master\\LaserShip-Game-master\\LaserShipGame\\images\\Single.png"));
+        } catch (IOException e) {
+            System.out.println("can't load image");
+        }
     }
+
+
+    void drawSingleButton(Graphics g){
+
+        g.drawImage(SingleButton, 0, 0, null);
+
+    }
+
 
 
     void draw(Graphics g) {
 
+        loadImage();
 
-        //drawScreen(g);
+        drawScreen(g);
+        drawSingleButton(g);
     }
 
     private void drawScreen(Graphics g) {
@@ -97,7 +100,6 @@ class Menu extends JPanel implements KeyListener {
 
 
     }
-
 
     void select(KeyEvent e) {
 
