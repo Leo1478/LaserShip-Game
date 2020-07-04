@@ -1,2 +1,2 @@
-public class Upgrade {
+class Upgrade {
 }

@@ -1,4 +1,8 @@
-public class GameVariables {
+/**
+ * class for some variables that will be used across any other class / game screen
+ */
+
+class GameVariables {
 
     static boolean inGame = true;
     static boolean menu = true;

@@ -7,10 +7,5 @@ import java.awt.Rectangle;
  */
 class Entity {
 
-    int x;
-    int y;
-
-    Rectangle hitbox;
-
 
 }

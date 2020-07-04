@@ -2,47 +2,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-
-
-class GameLoop {
+/**
+ * class for the game loop
+ */
+class GameLoop{
 
 
     //objects
-    Output output;
-    JFrame jFrame;
+    private Output output;
+    private JFrame jFrame;
 
-    Menu menu = new Menu();
-    SinglePlayer single = new SinglePlayer();
+    private Menu menu = new Menu();
+    private SinglePlayer single = new SinglePlayer();
 
-    fpsTracker fps = new fpsTracker();
+    private fpsTracker fps = new fpsTracker();
+    private Test test = new Test();
 
     //constructor
     GameLoop(){
         init();
     }
 
-    //main game loop for everything
-    void gameLoop() {
-
-        fps.time();
-        while (GameVariables.inGame) {
-
-            GameVariables.frame++;
-
-            if (GameVariables.menu) {
-                menu.menuLoop();
-                System.out.println("menu");
-            }
-
-            if (GameVariables.single) {
-                single.singleLoop();
-            }
-
-            jFrame.repaint();
-            delay(7);
-        }
-    }
 
     void init() {
         settings();
@@ -50,22 +33,26 @@ class GameLoop {
 
     void settings() {
 
-        jFrame = new JFrame();
-        output = new Output();
-
-        output = new Output();
+        jFrame = new JFrame();    // create a jframe
+        output = new Output();    // output object
 
         jFrame.setTitle("LaserShipGame");
-        jFrame.setSize(1500, 1000);
-        jFrame.setVisible(true);
+        jFrame.setSize(1524, 1057);
+        // real size is 1500 X 1000
+        // but have to set to 1524 X 1057 so that it starts at 1500 X 1000
+        // because JPanel ???
+
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        jFrame.add(output);
-
+        jFrame.add(output);    // add output object to jframe
+        jFrame.setVisible(true);
 
 
     }
 
+    /**
+     * pause the current thread
+     * @param time amount of time to sleep in milliseconds
+     */
     void delay(int time) {
         try {
             Thread.sleep(time);
@@ -75,44 +62,43 @@ class GameLoop {
     }
 
 
-    class Output extends JPanel {
+    /**
+     * main game loop for everything
+     */
+    void gameLoop() {
 
-        Output() {
+        fps.time();    // print the fps count
 
-            KeyListener listener = new KeyInput();
-            addKeyListener(listener);
-            setFocusable(true);
+        while (GameVariables.inGame) {    // while in game
 
-        }
+            GameVariables.frame++;
 
-        @Override
-        public void paintComponent(Graphics g) {
-
-            super.paintComponent(g);
-
-            //loop for displaying graphics
             if (GameVariables.menu) {
-
-                menu.draw(g);
+                menu.menuLoop();
             }
+
             if (GameVariables.single) {
-
-                single.draw(g);
+                single.singleLoop();
             }
+
+            jFrame.repaint();
+            delay(7);
         }
+
+        jFrame.setVisible(false);    // close the jFrame after user quit
+
     }
+
 
     /**
      * class for key inputs
      */
-    private class KeyInput implements KeyListener {
+    private class KeyInput implements KeyListener{
 
         //loop for inputs
 
         @Override
         public void keyPressed(KeyEvent e) {
-
-            menu.move(e, true);
             menu.keys(e);
 
             single.move(e, true);
@@ -126,11 +112,84 @@ class GameLoop {
         @Override
         public void keyReleased(KeyEvent e) {
 
-            menu.move(e, false);
             menu.keys(e);
 
             single.move(e, false);
 
         }
+
     }
+
+    /**
+     * class for mouse inputs
+     */
+    private class MouseInput implements MouseListener{
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+
+            if(GameVariables.menu){
+                menu.click(e);
+                System.out.println("clicked");
+            }
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
+
+    /**
+     * class for graphics outputs
+     */
+    class Output extends JPanel {
+
+        Output() {    // add keylistener and mouselistener temporarily to output object, and add output object to jframe
+
+            KeyListener listener = new KeyInput();
+            MouseListener mouseListener = new MouseInput();
+            addKeyListener(listener);
+            addMouseListener(mouseListener);
+            setFocusable(true);
+
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+
+            super.paintComponent(g);
+
+            // display graphics
+            if (GameVariables.menu) {
+
+                menu.draw(g);
+            }
+            if (GameVariables.single) {
+
+                single.draw(g);
+            }
+
+            test.draw(g);
+
+        }
+    }
+
 }

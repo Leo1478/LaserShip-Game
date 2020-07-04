@@ -15,12 +15,30 @@ class Enemy extends Entity {
     int[] x = new int[100];
     int[] y = new int[100];
 
+
+    Rectangle[] hitbox = new Rectangle[100];    // hitbox of the enemy
+
+
+    int height = 50;    // height and width of the enemy
+    int width = 50;
+
     //amount of enemies
     int amount = 0;
     int total = 0;
     int max = 100;
 
     int speed = 1;
+
+
+
+    void updateHitbox(){
+
+        for (int numEnemy = 0; numEnemy < total; numEnemy++) {
+
+            hitbox[numEnemy].x = x[numEnemy];
+            hitbox[numEnemy].y = y[numEnemy];
+        }
+    }
 
 
 
@@ -40,6 +58,10 @@ class Enemy extends Entity {
 
         x[amount] = eneX;
         y[amount] = eneY;
+
+        hitbox[amount] = new Rectangle();
+        hitbox[amount].height = height;
+        hitbox[amount].width = width;
 
         amount++;
         total++;
@@ -77,7 +99,7 @@ class Enemy extends Entity {
 
         g.setColor(Color.GREEN);
         for (int numEn = 0; numEn < total; numEn++) {
-            g.fillRect(x[numEn] - 25 , y[numEn] - 25, 50, 50);
+            g.fillRect(x[numEn], y[numEn], width, height);
         }
 
     }

@@ -4,15 +4,13 @@ import java.awt.event.KeyEvent;
 
 class Ship extends Entity{
 
-    int x;
-    int y;
+    private int x;
+    private int y;
 
     Ship(int x, int y) {    // constructor create ship with position
         this.x = x;
         this.y = y;
     }
-
-    Entity[] entity;
 
     int health;    // how much health the ship has
 
@@ -33,8 +31,8 @@ class Ship extends Entity{
 
     private int lasX;    // laser start position
     private int lasY;
-    private int laserX[] = new int[100];    // all laser position
-    private int laserY[] = new int[100];
+    private int laserX[] = new int[500];    // all laser position
+    private int laserY[] = new int[500];
 
     private int laserSpeedX = 8;    // laser speed
     private int laserSpeedY = 8;
@@ -46,7 +44,9 @@ class Ship extends Entity{
 
     private int amountLaser = 0;    // amount of lasers
     private int totalLaser = 0;
-    private int maxLaser = 100;
+    private int maxLaser = 500;
+
+
 
     /**
      * reset the speed of the ship
@@ -108,16 +108,16 @@ class Ship extends Entity{
      */
     void moveShip() {
         if (up) {
-            y = y + speedUp;
+            y += speedUp;
         }
         if (down) {
-            y = y + speedDown;
+            y += speedDown;
         }
         if (left) {
-            x = x + speedLeft;
+            x += speedLeft;
         }
         if (right) {
-            x = x + speedRight;
+            x += speedRight;
         }
     }
 
@@ -126,11 +126,8 @@ class Ship extends Entity{
      */
     void setLaser() {
 
-        lasX = x;
-        lasY = y;
-
-        laserX[amountLaser] = lasX;
-        laserY[amountLaser] = lasY;
+        laserX[amountLaser] = x;
+        laserY[amountLaser] = y;
 
         amountLaser ++;
         totalLaser ++;
@@ -150,7 +147,6 @@ class Ship extends Entity{
      * @return if a new laser should be spawned or not
      */
     boolean laserSpawnRate(int rate) {
-
         return (GameVariables.frame % rate == 0 & amountLaser <= maxLaser);
     }
 
@@ -159,7 +155,7 @@ class Ship extends Entity{
      */
     void moveLaser() {
 
-        for (int numLaser = 0; numLaser < 100; numLaser++) {
+        for (int numLaser = 0; numLaser < maxLaser; numLaser++) {
             laserX[numLaser] = laserX[numLaser] + laserSpeedX;
         }
 
@@ -177,17 +173,15 @@ class Ship extends Entity{
 
             for (int numEnemy = 0; numEnemy < enemy.total; numEnemy++) {
 
-                if (laserX[numLaser] > enemy.x[numEnemy] - 25
-                        & laserX[numLaser] < enemy.x[numEnemy] + 25
-                        & laserY[numLaser] > enemy.y[numEnemy] - 25
-                        & laserY[numLaser] < enemy.y[numEnemy] + 25) {
-
+                if (enemy.hitbox[numEnemy].contains(laserX[numLaser], laserY[numLaser])){
                     return numEnemy;
                 }
             }
         }
         return 101; // no enemy is hit
     }
+
+
 
     /**
      * check if the ship hits an enemy

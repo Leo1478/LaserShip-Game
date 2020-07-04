@@ -3,17 +3,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-class SinglePlayer extends JPanel implements KeyListener {
+class SinglePlayer{
 
+
+    private String imagePath = "F:\\java stuff\\LaserShipGame\\images\\";    // path of the images
 
     private BufferedImage backGround;
 
     Ship ship = new Ship(100, 100);
-    Enemy enemy = new Enemy();
+
     EnemyRectangle enemyRectangle = new EnemyRectangle();
     EnemyTriangle enemyTriangle = new EnemyTriangle();
 
@@ -22,8 +26,8 @@ class SinglePlayer extends JPanel implements KeyListener {
     boolean init = false;
 
     // constructor
-    void SinglePlayer(){
-
+    SinglePlayer(){
+        init();
     }
 
 
@@ -56,14 +60,17 @@ class SinglePlayer extends JPanel implements KeyListener {
         //    enemy.setEnemy();
         //}
 
-        if (ship.shipAlive & enemy.spawnRate(50)) {
+        if (ship.shipAlive & enemyRectangle.spawnRate(50)) {
             enemyRectangle.setEnemy();
         }
-        if (ship.shipAlive & enemy.spawnRate(50)) {
+        if (ship.shipAlive & enemyTriangle.spawnRate(50)) {
             enemyTriangle.setEnemy();
         }
 
         //enemy.removeEnemy(ship.laserHitEnemy(enemy));
+
+        enemyRectangle.updateHitbox();
+        enemyTriangle.updateHitbox();
 
         enemyRectangle.removeEnemy(ship.laserHitEnemy(enemyRectangle));
         enemyTriangle.removeEnemy(ship.laserHitEnemy(enemyTriangle));
@@ -93,36 +100,39 @@ class SinglePlayer extends JPanel implements KeyListener {
     }
 
     void init(){
-
-        if (init == false) {
-
-            loadImage();
-            init = true;
-        }
+        loadImage();
     }
 
-
+    /**
+     * all graphics in single player
+     * @param g
+     */
     void draw(Graphics g) {
 
-        init();
         background(g);
         ship.drawShip(g);
         ship.drawLaser(g);
         ship.drawBox(g);
-        //enemy.draw(g);
         enemyRectangle.draw(g);
         enemyTriangle.draw(g);
 
     }
 
 
+    /**
+     * load images
+     */
     void loadImage(){
         try {
-            backGround = ImageIO.read(new File("F:\\java stuff\\LaserShipGame\\images\\space_background.jpg"));
+            backGround = ImageIO.read(new File(imagePath + "space_background.jpg"));
         } catch (IOException e) {
         }
     }
 
+    /**
+     * single player background
+     * @param g
+     */
     void background(Graphics g){
 
         g.drawImage(backGround,(int) backgroundPosition, 0, null );
@@ -148,24 +158,8 @@ class SinglePlayer extends JPanel implements KeyListener {
             ship.right = bool;
         }
 
-
-
     }
 
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
 
 }
 
